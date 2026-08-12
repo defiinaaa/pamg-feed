@@ -1,0 +1,2220 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PAMG-FEED - Sistem Informasi & Kalkulator Pakan</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: #f8fafc;
+            color: #0f172a;
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ==========================================
+           1. LANDING PAGE STYLES
+           ========================================== */
+        .landing-wrapper {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 8%;
+            background-color: #ffffff;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+            border-bottom: 3px solid #059669;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-img {
+            height: 42px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: 800;
+            color: #064e3b;
+            letter-spacing: 0.5px;
+        }
+
+        .logo span { color: #10b981; }
+
+        .btn-nav-login {
+            background-color: #059669;
+            color: white !important;
+            padding: 10px 24px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            box-shadow: 0 2px 6px rgba(5, 150, 105, 0.25);
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .btn-nav-login:hover {
+            background-color: #064e3b;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(6, 78, 59, 0.35);
+        }
+
+        .hero-banner {
+            background: linear-gradient(135deg, #064e3b 0%, #047857 100%);
+            color: white;
+            padding: 50px 20px;
+            text-align: center;
+            box-shadow: inset 0 -5px 10px rgba(0,0,0,0.08);
+        }
+
+        .main-title {
+            font-size: 30px;
+            color: #ffffff;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+        }
+
+        .main-title-sub {
+            color: #a7f3d0;
+            font-size: 15px;
+            margin-top: 6px;
+            font-weight: 500;
+        }
+
+        .main-content {
+            flex: 1;
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 35px;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(15, 23, 42, 0.05);
+            border-top: 4px solid #10b981;
+            width: 90%;
+        }
+
+        .content-body p {
+            color: #334155;
+            font-size: 16px;
+            margin-bottom: 20px;
+            text-align: justify;
+        }
+
+        .footer {
+            background-color: #022c22;
+            color: #f1f5f9;
+            padding: 50px 8% 25px 8%;
+            margin-top: auto;
+            border-top: 4px solid #059669;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .footer-col h4 {
+            color: #6ee7b7;
+            font-size: 16px;
+            margin-bottom: 16px;
+            border-left: 3px solid #10b981;
+            padding-left: 8px;
+        }
+
+        .footer-col p {
+            font-size: 14px;
+            color: #94a3b8;
+            margin-bottom: 8px;
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid #064e3b;
+            font-size: 13px;
+            color: #a7f3d0;
+        }
+
+        /* MODAL STYLES GENERAL */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(2, 44, 34, 0.75);
+            backdrop-filter: blur(4px);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .login-card-modal, .modal-card {
+            background: white;
+            padding: 35px;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 420px;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+            border-top: 5px solid #059669;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .modal-card-lg {
+            max-width: 550px;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 22px;
+            cursor: pointer;
+            color: #94a3b8;
+        }
+
+        .close-btn:hover { color: #064e3b; }
+        .brand-header, .modal-header { text-align: center; margin-bottom: 24px; }
+        .brand-header h2, .modal-header h2 { color: #064e3b; font-size: 20px; font-weight: 700; }
+        .brand-header p, .modal-header p { color: #64748b; font-size: 13px; margin-top: 4px; }
+
+        .form-group { margin-bottom: 16px; }
+        .form-group label { display: block; margin-bottom: 6px; color: #334155; font-size: 13px; font-weight: 600; }
+        .form-group input, .form-group select { width: 100%; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; outline: none; background: #fff; }
+        .form-group input:focus, .form-group select:focus { border-color: #059669; box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.2); }
+        
+        .form-row-2col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        .password-wrapper { position: relative; display: flex; align-items: center; }
+        .password-wrapper input { padding-right: 70px; }
+
+        .toggle-password {
+            position: absolute;
+            right: 12px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 12px;
+            color: #059669;
+            font-weight: 600;
+        }
+
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            font-size: 13px;
+        }
+
+        .remember-me { display: flex; align-items: center; gap: 6px; color: #475569; cursor: pointer; }
+        .remember-me input { accent-color: #059669; cursor: pointer; }
+        .forgot-password { color: #059669; text-decoration: none; font-weight: 600; }
+
+        .error-message {
+            color: #b91c1c;
+            font-size: 13px;
+            margin-bottom: 16px;
+            display: none;
+            text-align: center;
+            font-weight: 500;
+            background-color: #fef2f2;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #fca5a5;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 12px;
+            background-color: #059669;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            font-size: 14px;
+            margin-top: 8px;
+        }
+
+        .btn-submit:hover { background-color: #064e3b; }
+
+        /* ==========================================
+           2. DASHBOARD PAGE STYLES (POST LOGIN)
+           ========================================== */
+        .dashboard-wrapper {
+            display: none;
+            flex-direction: column;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        .app-header {
+            background: #064e3b;
+            color: #ffffff;
+            padding: 14px 5% 0 5%;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1280px;
+            margin: 0 auto 14px;
+        }
+
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 20px;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: 0.5px;
+        }
+
+        .brand-logo span { color: #10b981; }
+
+        .logo-img-dash {
+            height: 38px;
+            width: auto;
+            object-fit: contain;
+            background: #ffffff;
+            border-radius: 50%;
+            padding: 2px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .avatar-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.08);
+            padding: 6px 16px 6px 6px;
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .user-avatar {
+            position: relative;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: #10b981;
+            color: #ffffff;
+            font-weight: 800;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .status-dot {
+            position: absolute;
+            bottom: -1px;
+            right: -1px;
+            width: 10px;
+            height: 10px;
+            background-color: #22c55e;
+            border: 2px solid #064e3b;
+            border-radius: 50%;
+        }
+
+        .user-name { font-size: 13px; font-weight: 700; color: #ffffff; }
+
+        .btn-logout {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(239, 68, 68, 0.15);
+            color: #fca5a5;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-logout:hover {
+            background: #dc2626;
+            color: #ffffff;
+            border-color: #dc2626;
+        }
+
+        .tabs-nav {
+            display: flex;
+            gap: 8px;
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            color: #a7f3d0;
+            padding: 12px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .tab-btn:hover { color: #ffffff; }
+
+        .tab-btn.active {
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.08);
+            border-bottom-color: #10b981;
+            border-top-left-radius: 6px;
+            border-top-right-radius: 6px;
+        }
+
+        .main-container {
+            max-width: 1280px;
+            margin: 28px auto;
+            padding: 0 20px 60px;
+            width: 100%;
+        }
+
+        /* TAB 1: KALKULATOR STYLES */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1.25fr 0.75fr;
+            gap: 24px;
+            align-items: start;
+        }
+
+        @media (max-width: 962px) {
+            .dashboard-grid { grid-template-columns: 1fr; }
+        }
+
+        .card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .card-title { font-size: 16px; font-weight: 700; color: #0f172a; }
+        .total-badge { font-size: 13px; font-weight: 700; color: #059669; }
+        .total-badge.error { color: #e11d48; }
+
+        .ingredient-list { display: flex; flex-direction: column; gap: 12px; }
+
+        .ingredient-item {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 12px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .ing-details-left {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            flex: 1;
+            min-width: 220px;
+        }
+
+        .ing-select {
+            padding: 8px 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 13.5px;
+            font-weight: 700;
+            color: #0f172a;
+            background-color: #ffffff;
+            cursor: pointer;
+            outline: none;
+            width: 100%;
+        }
+
+        .ing-select:focus {
+            border-color: #059669;
+            box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.15);
+        }
+
+        .ing-price { font-size: 11.5px; color: #64748b; font-weight: 600; margin-left: 2px; }
+
+        .ing-input-group { display: flex; align-items: center; gap: 10px; }
+        .ing-cost-calc { font-size: 13.5px; font-weight: 700; color: #064e3b; text-align: right; min-width: 75px; }
+
+        .input-box-wrapper { position: relative; display: flex; align-items: center; }
+
+        .pct-input {
+            width: 68px;
+            padding: 7px 22px 7px 8px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 13.5px;
+            font-weight: 700;
+            color: #0f172a;
+            text-align: right;
+            outline: none;
+            background: #ffffff;
+        }
+
+        .pct-input:focus { border-color: #059669; box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.15); }
+        
+        .input-suffix, .weight-suffix { 
+            position: absolute; 
+            right: 8px; 
+            font-size: 11px; 
+            font-weight: 600; 
+            color: #64748b; 
+            pointer-events: none; 
+            user-select: none;
+        }
+
+        .btn-remove-ing {
+            background: #fef2f2;
+            border: 1px solid #fca5a5;
+            color: #dc2626;
+            border-radius: 6px;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+
+        .btn-remove-ing:hover {
+            background: #dc2626;
+            color: #ffffff;
+            border-color: #dc2626;
+        }
+
+        .btn-add-ing {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            width: 100%;
+            margin-top: 14px;
+            padding: 10px;
+            background: #ecfdf5;
+            border: 1px dashed #059669;
+            border-radius: 8px;
+            color: #059669;
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-add-ing:hover {
+            background: #d1fae5;
+            border-style: solid;
+        }
+
+        .nutrition-summary {
+            margin-top: 24px;
+            padding-top: 18px;
+            border-top: 1px solid #e2e8f0;
+            display: flex;
+            gap: 32px;
+        }
+
+        .nutri-box .label { font-size: 12px; font-weight: 600; color: #64748b; margin-bottom: 2px; }
+        .nutri-box .val { font-size: 20px; font-weight: 800; color: #064e3b; }
+        .nutri-box .val span { font-size: 13px; font-weight: 600; color: #475569; }
+
+        .right-column { display: flex; flex-direction: column; gap: 20px; }
+
+        .param-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 16px; }
+
+        .field-group label { display: block; font-size: 11px; font-weight: 700; color: #475569; margin-bottom: 6px; }
+        .field-group input { width: 100%; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; font-weight: 700; }
+
+        .hpp-display-box { background: #f1f5f9; border-radius: 10px; padding: 16px; }
+        .hpp-display-box .lbl { font-size: 12px; font-weight: 600; color: #64748b; margin-bottom: 4px; }
+        .hpp-display-box .val { font-size: 24px; font-weight: 800; color: #0f172a; }
+
+        .financial-card { background: #ffffff; border: 1.5px solid #a7f3d0; border-radius: 14px; padding: 24px; }
+        .financial-card .card-title { color: #047857; margin-bottom: 16px; }
+
+        .fin-boxes { display: flex; flex-direction: column; gap: 12px; }
+        .fin-box { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px 16px; }
+        .fin-box .lbl { font-size: 12px; font-weight: 600; color: #64748b; }
+        .fin-box .val { font-size: 20px; font-weight: 800; color: #0f172a; }
+        .fin-box.highlight-blue .val { color: #0284c7; }
+        .fin-box.highlight-green .val { color: #059669; }
+
+        /* ==========================================
+           3. TAB 2: DATABASE BAHAN STYLES
+           ========================================== */
+        .db-filter-bar {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 24px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .search-wrapper {
+            position: relative;
+            flex: 1;
+            min-width: 260px;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #64748b;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 11px 16px 11px 42px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+            background: #ffffff;
+            transition: all 0.2s;
+        }
+
+        .search-input:focus {
+            border-color: #059669;
+            box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.15);
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            padding: 0 12px;
+            height: 44px;
+        }
+
+        .filter-group label {
+            font-size: 13px;
+            color: #64748b;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .filter-select {
+            border: none;
+            outline: none;
+            font-size: 14px;
+            font-weight: 600;
+            color: #0f172a;
+            background: transparent;
+            cursor: pointer;
+            padding-right: 8px;
+        }
+
+        .btn-add-db {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background-color: #059669;
+            color: #ffffff;
+            border: none;
+            padding: 0 18px;
+            height: 44px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 13.5px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 6px rgba(5, 150, 105, 0.2);
+            white-space: nowrap;
+        }
+
+        .btn-add-db:hover {
+            background-color: #064e3b;
+            transform: translateY(-1px);
+        }
+
+        .db-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 20px;
+        }
+
+        .db-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 6px rgba(15, 23, 42, 0.03);
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .db-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(15, 23, 42, 0.06);
+            border-color: #cbd5e1;
+        }
+
+        .db-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .db-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #0f172a;
+            line-height: 1.3;
+        }
+
+        .db-price {
+            font-size: 15px;
+            font-weight: 800;
+            color: #064e3b;
+            white-space: nowrap;
+        }
+
+        .db-badges {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .badge-tag {
+            font-size: 11px;
+            font-weight: 600;
+            padding: 3px 10px;
+            border-radius: 6px;
+        }
+
+        .badge-lokal {
+            background-color: #ecfdf5;
+            color: #059669;
+            border: 1px solid #a7f3d0;
+        }
+
+        .badge-impor {
+            background-color: #fef2f2;
+            color: #dc2626;
+            border: 1px solid #fca5a5;
+        }
+
+        .badge-category {
+            background-color: #f1f5f9;
+            color: #475569;
+        }
+
+        .badge-lead {
+            background-color: #fef3c7;
+            color: #d97706;
+        }
+
+        .db-nutri-box {
+            background: #f8fafc;
+            border-radius: 8px;
+            padding: 10px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+        }
+
+        .db-nutri-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .db-nutri-item .lbl { color: #64748b; font-weight: 500; }
+        .db-nutri-item .val { color: #0f172a; font-weight: 700; }
+
+        /* ==========================================
+           4. TAB 3: SIMULASI SUBSTITUSI STYLES
+           ========================================== */
+        .sub-config-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 24px;
+            margin-bottom: 28px;
+            box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+        }
+
+        .sub-config-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 18px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .sub-config-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 28px;
+            align-items: start;
+        }
+
+        @media (max-width: 868px) {
+            .sub-config-grid { grid-template-columns: 1fr; }
+        }
+
+        .sub-field-group label {
+            display: block;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            color: #64748b;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .sub-baseline-select {
+            width: 100%;
+            padding: 11px 14px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 700;
+            color: #0f172a;
+            background-color: #ffffff;
+            cursor: pointer;
+            outline: none;
+        }
+
+        .sub-baseline-select:focus {
+            border-color: #059669;
+            box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.15);
+        }
+
+        .weights-inputs-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+
+        @media (max-width: 600px) {
+            .weights-inputs-container { grid-template-columns: 1fr; }
+        }
+
+        .weight-input-box {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .weight-input-box label {
+            font-size: 12px;
+            font-weight: 700;
+            color: #334155;
+            text-transform: none;
+        }
+
+        .weight-number-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .weight-num-input {
+            width: 100%;
+            padding: 9px 28px 9px 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 700;
+            color: #0f172a;
+            outline: none;
+            background: #ffffff;
+        }
+
+        .weight-num-input:focus {
+            border-color: #059669;
+            box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.15);
+        }
+
+        .sub-results-header {
+            font-size: 18px;
+            font-weight: 800;
+            color: #0f172a;
+            margin-bottom: 20px;
+        }
+
+        .sub-results-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .sub-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 22px 24px;
+            box-shadow: 0 2px 6px rgba(15, 23, 42, 0.03);
+            transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .sub-card.optimal {
+            border: 2px solid #10b981;
+            box-shadow: 0 4px 16px rgba(16, 185, 129, 0.12);
+        }
+
+        .sub-card-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 16px;
+        }
+
+        .sub-item-title-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .sub-item-title {
+            font-size: 17px;
+            font-weight: 800;
+            color: #0f172a;
+        }
+
+        .badge-optimal {
+            background-color: #059669;
+            color: #ffffff;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 12px;
+        }
+
+        .sub-score-box {
+            text-align: right;
+            white-space: nowrap;
+        }
+
+        .sub-score-num {
+            font-size: 26px;
+            font-weight: 800;
+            color: #064e3b;
+            line-height: 1;
+        }
+
+        .sub-score-num span {
+            font-size: 13px;
+            font-weight: 600;
+            color: #64748b;
+        }
+
+        .sub-score-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: #64748b;
+            margin-top: 4px;
+        }
+
+        .sub-meta-info {
+            font-size: 13px;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .sub-meta-info strong {
+            color: #0f172a;
+            font-weight: 700;
+        }
+
+        .sub-metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            align-items: center;
+        }
+
+        @media (max-width: 768px) {
+            .sub-metrics-grid { grid-template-columns: 1fr; gap: 12px; }
+        }
+
+        .metric-item {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .metric-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            font-weight: 600;
+            color: #475569;
+        }
+
+        .metric-val {
+            font-weight: 800;
+            color: #0f172a;
+        }
+
+        .progress-bar-bg {
+            height: 7px;
+            width: 100%;
+            background-color: #e2e8f0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.4s ease;
+        }
+
+        .fill-blue { background-color: #0284c7; }
+        .fill-green { background-color: #059669; }
+        .fill-orange { background-color: #d97706; }
+
+        /* ==========================================
+           5. AI AGENT ASSISTANT FLOATING WIDGET
+           ========================================== */
+        .ai-fab-btn {
+            position: fixed;
+            bottom: 28px;
+            right: 28px;
+            background: linear-gradient(135deg, #059669 0%, #064e3b 100%);
+            color: #ffffff;
+            border: none;
+            border-radius: 50px;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            font-size: 14px;
+            box-shadow: 0 6px 20px rgba(5, 150, 105, 0.4);
+            cursor: pointer;
+            z-index: 900;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .ai-fab-btn:hover {
+            transform: translateY(-3px) scale(1.03);
+            box-shadow: 0 10px 25px rgba(5, 150, 105, 0.5);
+        }
+
+        .ai-fab-badge {
+            width: 9px;
+            height: 9px;
+            background-color: #22c55e;
+            border-radius: 50%;
+            border: 2px solid #064e3b;
+        }
+
+        .ai-chat-window {
+            position: fixed;
+            bottom: 90px;
+            right: 28px;
+            width: 380px;
+            height: 520px;
+            max-width: calc(100vw - 40px);
+            max-height: calc(100vh - 120px);
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 12px 36px rgba(15, 23, 42, 0.18);
+            border: 1px solid #cbd5e1;
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            z-index: 950;
+            animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .ai-chat-header {
+            background: #064e3b;
+            color: #ffffff;
+            padding: 14px 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #059669;
+        }
+
+        .ai-header-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .ai-avatar {
+            width: 32px;
+            height: 32px;
+            background: #10b981;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 13px;
+            color: white;
+        }
+
+        .ai-header-title {
+            font-size: 14px;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .ai-header-sub {
+            font-size: 11px;
+            color: #a7f3d0;
+        }
+
+        .ai-close-btn {
+            background: transparent;
+            border: none;
+            color: #a7f3d0;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 0 4px;
+        }
+
+        .ai-close-btn:hover { color: #ffffff; }
+
+        .ai-chat-body {
+            flex: 1;
+            padding: 16px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            background: #f8fafc;
+        }
+
+        .chat-msg {
+            max-width: 82%;
+            font-size: 13px;
+            line-height: 1.5;
+            padding: 10px 14px;
+            border-radius: 12px;
+            word-wrap: break-word;
+        }
+
+        .msg-ai {
+            background: #ffffff;
+            color: #0f172a;
+            border: 1px solid #e2e8f0;
+            align-self: flex-start;
+            border-top-left-radius: 2px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+        }
+
+        .msg-user {
+            background: #059669;
+            color: #ffffff;
+            align-self: flex-end;
+            border-top-right-radius: 2px;
+        }
+
+        .ai-quick-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 4px;
+        }
+
+        .chip-btn {
+            background: #ecfdf5;
+            border: 1px solid #a7f3d0;
+            color: #047857;
+            padding: 5px 10px;
+            border-radius: 14px;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .chip-btn:hover {
+            background: #059669;
+            color: #ffffff;
+            border-color: #059669;
+        }
+
+        .ai-chat-footer {
+            padding: 12px;
+            background: #ffffff;
+            border-top: 1px solid #e2e8f0;
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .ai-input {
+            flex: 1;
+            padding: 9px 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 13px;
+            outline: none;
+        }
+
+        .ai-input:focus {
+            border-color: #059669;
+        }
+
+        .ai-send-btn {
+            background: #059669;
+            color: white;
+            border: none;
+            padding: 9px 14px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .ai-send-btn:hover {
+            background: #064e3b;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ==========================================
+         VIEW 1: LANDING PAGE & MODAL LOGIN
+         ========================================== -->
+    <div id="landingView" class="landing-wrapper">
+        <nav class="navbar">
+            <div class="logo-container">
+                <img src="https://drive.google.com/thumbnail?id=1RFd62trUF0GXhUXnX4LNBgsuGnX2VMtB&sz=w1000" alt="Logo PAMG" class="logo-img">
+                <div class="logo">PAMG-<span>FEED</span></div>
+            </div>
+            <div>
+                <a class="btn-nav-login" onclick="openLoginModal()">Login System</a>
+            </div>
+        </nav>
+
+        <section class="hero-banner">
+            <h1 class="main-title">Peternakan Ayam Manggis Group</h1>
+            <p class="main-title-sub">Sistem Informasi & Optimalisasi Pakan Presisi</p>
+        </section>
+
+        <main class="main-content">
+            <div class="content-body">
+                <p>Selamat datang di platform manajemen pakan terintegrasi Peternakan Ayam Manggis Group. Kelola kebutuhan pakan lebih efisien, pantau pasokan secara real-time, dan pastikan ketersediaan stok di setiap unit usaha.</p>
+            </div>
+        </main>
+
+        <!-- FOOTER DENGAN KONTAK BARS / PERBAHARUAN TERBARU -->
+        <footer class="footer">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>PAMG-FEED</h4>
+                    <p>Sistem Optimalisasi Pakan & Efisiensi Operasional Peternakan Terpadu.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Kantor Pusat</h4>
+                    <p>📍 Wisma Argo Manunggal</p>
+                    <p>Jl. Gatot Subroto Kav. 22, Karet Semanggi, Kecamatan Setiabudi, Kota Jakarta Selatan, DKI Jakarta</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Contact Person</h4>
+                    <p>📞 Telepon: (021) 6929578</p>
+                    <p>💼 LinkedIn: PT Peternakan Ayam Manggis</p>
+                </div>
+            </div>
+            <div class="copyright">
+                &copy; 2026 Peternakan Ayam Manggis Group (PAMG-FEED). All rights reserved.
+            </div>
+        </footer>
+
+        <!-- MODAL LOGIN -->
+        <div class="modal-overlay" id="loginModal">
+            <div class="login-card-modal">
+                <span class="close-btn" onclick="closeLoginModal()">&times;</span>
+                <div class="brand-header">
+                    <h2>PAMG-FEED System</h2>
+                    <p>Portal Login Internal Karyawan</p>
+                </div>
+
+                <form id="loginForm" onsubmit="handleLogin(event)">
+                    <div class="error-message" id="errorMessage">Email atau kata sandi tidak sesuai.</div>
+
+                    <div class="form-group">
+                        <label for="email">Email Karyawan</label>
+                        <input type="email" id="email" value="karyawan@pamg.co.id" placeholder="nama@pamg.co.id" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Kata Sandi</label>
+                        <div class="password-wrapper">
+                            <input type="password" id="password" value="pamg2026" placeholder="••••••••" required>
+                            <button type="button" class="toggle-password" onclick="togglePasswordVisibility()">Lihat</button>
+                        </div>
+                    </div>
+
+                    <div class="form-options">
+                        <label class="remember-me">
+                            <input type="checkbox" id="rememberMe" checked> Ingat saya
+                        </label>
+                        <a href="#" class="forgot-password" onclick="handleForgotPassword(event)">Lupa kata sandi?</a>
+                    </div>
+
+                    <button type="submit" class="btn-submit">Masuk ke Dashboard</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ==========================================
+         VIEW 2: DASHBOARD PAGE (POST LOGIN)
+         ========================================== -->
+    <div id="dashboardView" class="dashboard-wrapper">
+        <header class="app-header">
+            <div class="header-top">
+                <div class="brand-logo">
+                    <img src="https://drive.google.com/thumbnail?id=1RFd62trUF0GXhUXnX4LNBgsuGnX2VMtB&sz=w1000" alt="Logo PAMG" class="logo-img-dash">
+                    <div>PAMG-<span>FEED</span></div>
+                </div>
+                
+                <div class="user-profile">
+                    <div class="avatar-container">
+                        <div class="user-avatar">
+                            <span id="userInitials">KP</span>
+                            <span class="status-dot"></span>
+                        </div>
+                        <span class="user-name" id="loggedInUserName">Karyawan PAMG</span>
+                    </div>
+                    <button class="btn-logout" onclick="handleLogout()" title="Keluar dari sistem">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                            <polyline points="16 17 21 12 16 7"></polyline>
+                            <line x1="21" y1="12" x2="9" y2="12"></line>
+                        </svg>
+                        <span>Keluar</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- TABS NAVIGATION -->
+            <nav class="tabs-nav">
+                <button class="tab-btn active" id="tabBtnKalkulator" onclick="switchTab('kalkulator')">Kalkulator Formula</button>
+                <button class="tab-btn" id="tabBtnDatabase" onclick="switchTab('database')">Database Bahan</button>
+                <button class="tab-btn" id="tabBtnSubstitusi" onclick="switchTab('substitusi')">Simulasi Substitusi</button>
+            </nav>
+        </header>
+
+        <main class="main-container">
+
+            <!-- TAB 1 CONTENT: KALKULATOR -->
+            <div id="tabContentKalkulator" class="tab-content">
+                <div class="dashboard-grid">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Komposisi Rasio Formula</h2>
+                            <span id="totalPctBadge" class="total-badge">(Total: 100%)</span>
+                        </div>
+
+                        <div class="ingredient-list" id="formulaListContainer">
+                            <!-- Dynamic Content -->
+                        </div>
+
+                        <button type="button" class="btn-add-ing" onclick="addFormulaRow()">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                            </svg>
+                            <span>Tambah Bahan Pakan</span>
+                        </button>
+
+                        <div class="nutrition-summary">
+                            <div class="nutri-box">
+                                <div class="label">Protein Kasar (CP)</div>
+                                <div class="val" id="val-cp">0%</div>
+                            </div>
+                            <div class="nutri-box">
+                                <div class="label">Energi Metabolis (ME)</div>
+                                <div class="val" id="val-me">0 <span>kcal/kg</span></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="right-column">
+                        <div class="card">
+                            <h2 class="card-title" style="margin-bottom: 16px;">Parameter Produksi Batch</h2>
+                            
+                            <div class="param-grid">
+                                <div class="field-group">
+                                    <label for="volumeTon">VOLUME PRODUKSI (TON)</label>
+                                    <input type="text" inputmode="decimal" id="volumeTon" value="20" onfocus="this.select()" oninput="calculateAll()">
+                                </div>
+                                <div class="field-group">
+                                    <label for="targetMargin">TARGET MARGIN (%)</label>
+                                    <input type="text" inputmode="decimal" id="targetMargin" value="12" onfocus="this.select()" oninput="calculateAll()">
+                                </div>
+                            </div>
+
+                            <div class="hpp-display-box">
+                                <div class="lbl">HPP Blended Pakan per Kg</div>
+                                <div class="val" id="hppPerKg">Rp 0 <span>/ kg</span></div>
+                            </div>
+                        </div>
+
+                        <div class="financial-card">
+                            <h2 class="card-title">Proyeksi Finansial</h2>
+
+                            <div class="fin-boxes">
+                                <div class="fin-box">
+                                    <div class="lbl" id="lblTotalHpp">Total HPP Produksi (20 Ton)</div>
+                                    <div class="val" id="valTotalHpp">Rp 0</div>
+                                </div>
+
+                                <div class="fin-box highlight-blue">
+                                    <div class="lbl" id="lblHargaJual">Harga Jual Rekomendasi (+12%)</div>
+                                    <div class="val" id="valHargaJual">Rp 0 / kg</div>
+                                </div>
+
+                                <div class="fin-box highlight-green">
+                                    <div class="lbl">Proyeksi Margin Keuntungan</div>
+                                    <div class="val" id="valTotalMargin">Rp 0</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 2 CONTENT: DATABASE BAHAN -->
+            <div id="tabContentDatabase" class="tab-content" style="display: none;">
+                <div class="db-filter-bar">
+                    <div class="search-wrapper">
+                        <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                        <input type="text" id="dbSearch" class="search-input" placeholder="Cari nama komoditas atau kategori..." oninput="renderDatabase()">
+                    </div>
+
+                    <div class="filter-group">
+                        <label for="filterAsal">Asal:</label>
+                        <select id="filterAsal" class="filter-select" onchange="renderDatabase()">
+                            <option value="all">Semua Asal</option>
+                            <option value="lokal">Bahan Lokal</option>
+                            <option value="impor">Bahan Impor</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label for="filterUrutkan">Urutkan:</label>
+                        <select id="filterUrutkan" class="filter-select" onchange="renderDatabase()">
+                            <option value="price_asc">Harga Termurah</option>
+                            <option value="protein_desc">Protein Tertinggi</option>
+                            <option value="energi_desc">Energi Tertinggi</option>
+                            <option value="lead_asc">Lead Time Tercepat</option>
+                        </select>
+                    </div>
+
+                    <!-- TOMBOL TAMBAH BAHAN BARU -->
+                    <button class="btn-add-db" onclick="openAddIngredientModal()">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                        <span>Tambah Bahan</span>
+                    </button>
+                </div>
+
+                <div id="dbGrid" class="db-grid">
+                    <!-- Dynamic Content -->
+                </div>
+            </div>
+
+            <!-- TAB 3 CONTENT: SIMULASI SUBSTITUSI -->
+            <div id="tabContentSubstitusi" class="tab-content" style="display: none;">
+                
+                <div class="sub-config-card">
+                    <div class="sub-config-title">Konfigurasi Parameter Substitusi</div>
+                    
+                    <div class="sub-config-grid">
+                        <div class="sub-field-group">
+                            <label for="subBaselineSelect">BAHAN BAKU ACUAN (BASELINE)</label>
+                            <select id="subBaselineSelect" class="sub-baseline-select" onchange="renderSubstitusi()">
+                                <!-- Dynamic Options -->
+                            </select>
+                        </div>
+
+                        <div class="sub-field-group">
+                            <label>BOBOT OPTIMASI DECISION MATRIX (%)</label>
+                            <div class="weights-inputs-container">
+                                <div class="weight-input-box">
+                                    <label for="weightBiaya">Biaya</label>
+                                    <div class="weight-number-wrapper">
+                                        <input type="text" inputmode="decimal" id="weightBiaya" class="weight-num-input" value="40" onfocus="this.select()" oninput="renderSubstitusi()">
+                                        <span class="weight-suffix">%</span>
+                                    </div>
+                                </div>
+
+                                <div class="weight-input-box">
+                                    <label for="weightNutrisi">Kemiripan Nutrisi</label>
+                                    <div class="weight-number-wrapper">
+                                        <input type="text" inputmode="decimal" id="weightNutrisi" class="weight-num-input" value="40" onfocus="this.select()" oninput="renderSubstitusi()">
+                                        <span class="weight-suffix">%</span>
+                                    </div>
+                                </div>
+
+                                <div class="weight-input-box">
+                                    <label for="weightPasokan">Ketahanan Pasokan</label>
+                                    <div class="weight-number-wrapper">
+                                        <input type="text" inputmode="decimal" id="weightPasokan" class="weight-num-input" value="20" onfocus="this.select()" oninput="renderSubstitusi()">
+                                        <span class="weight-suffix">%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <h3 class="sub-results-header" id="subResultsHeader">Rekomendasi Substitusi Terbaik</h3>
+
+                <div id="substitusiListContainer" class="sub-results-list">
+                    <!-- Dynamic Items Rendered Here -->
+                </div>
+
+            </div>
+
+        </main>
+
+        <!-- ==========================================
+             6. FLOATING AI ASSISTANT WIDGET
+             ========================================== -->
+        <button class="ai-fab-btn" onclick="toggleAiChat()">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            </svg>
+            <span>Tanya PAMG AI</span>
+            <span class="ai-fab-badge"></span>
+        </button>
+
+        <div class="ai-chat-window" id="aiChatWindow">
+            <div class="ai-chat-header">
+                <div class="ai-header-info">
+                    <div class="ai-avatar">AI</div>
+                    <div>
+                        <div class="ai-header-title">PAMG Assistant</div>
+                        <div class="ai-header-sub">Online • Pakar Optimasi Pakan</div>
+                    </div>
+                </div>
+                <button class="ai-close-btn" onclick="toggleAiChat()">&times;</button>
+            </div>
+
+            <div class="ai-chat-body" id="aiChatBody">
+                <div class="chat-msg msg-ai">
+                    Halo! Saya <strong>PAMG AI Assistant</strong>. Ada yang bisa saya bantu terkait formulasi pakan, analisis HPP, atau substitusi bahan pakan hari ini?
+                </div>
+
+                <div class="ai-quick-chips">
+                    <button class="chip-btn" onclick="sendQuickPrompt('Bagaimana cara efisiensi HPP pakan?')">Cara Turunkan HPP?</button>
+                    <button class="chip-btn" onclick="sendQuickPrompt('Berapa kadar Protein Kasar ideal broiler?')">Standar Protein Broiler?</button>
+                    <button class="chip-btn" onclick="sendQuickPrompt('Rekomendasi pengganti Soybean Meal?')">Substitusi SBM?</button>
+                </div>
+            </div>
+
+            <div class="ai-chat-footer">
+                <input type="text" id="aiInput" class="ai-input" placeholder="Ketik pertanyaan atau arahan..." onkeypress="handleAiKeyPress(event)">
+                <button class="ai-send-btn" onclick="sendAiMessage()">Kirim</button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ==========================================
+         MODAL 2: TAMBAH BAHAN BAKU BARU
+         ========================================== -->
+    <div class="modal-overlay" id="addIngredientModal">
+        <div class="modal-card modal-card-lg">
+            <span class="close-btn" onclick="closeAddIngredientModal()">&times;</span>
+            <div class="modal-header">
+                <h2>Tambah Bahan Pakan Baru</h2>
+                <p>Masukkan spesifikasi nutrisi dan informasi komoditas</p>
+            </div>
+
+            <form id="addIngredientForm" onsubmit="handleAddNewIngredient(event)">
+                <div class="form-group">
+                    <label for="newIngName">Nama Bahan / Komoditas</label>
+                    <input type="text" id="newIngName" placeholder="Contoh: Tepung Lemuru Premium" required>
+                </div>
+
+                <div class="form-row-2col">
+                    <div class="form-group">
+                        <label for="newIngPrice">Harga per Kg (Rp)</label>
+                        <input type="number" id="newIngPrice" placeholder="5000" min="0" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="newIngOrigin">Asal Bahan</label>
+                        <select id="newIngOrigin" required>
+                            <option value="Lokal">Lokal</option>
+                            <option value="Impor">Impor</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row-2col">
+                    <div class="form-group">
+                        <label for="newIngCategory">Kategori</label>
+                        <select id="newIngCategory" required>
+                            <option value="Protein">Protein</option>
+                            <option value="Energi">Energi</option>
+                            <option value="Vitamin">Vitamin</option>
+                            <option value="Mineral">Mineral</option>
+                            <option value="Aditif">Aditif</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="newIngLead">Lead Time Pengadaan (Hari)</label>
+                        <input type="number" id="newIngLead" placeholder="3" min="1" required>
+                    </div>
+                </div>
+
+                <div class="form-row-2col">
+                    <div class="form-group">
+                        <label for="newIngProtein">Protein Kasar / CP (%)</label>
+                        <input type="number" id="newIngProtein" placeholder="45" step="0.1" min="0" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="newIngEnergi">Energi Metabolis / ME (kcal/kg)</label>
+                        <input type="number" id="newIngEnergi" placeholder="2800" min="0" required>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-submit">Simpan Bahan Pakan</button>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- ==========================================
+         JAVASCRIPT LOGIC
+         ========================================== -->
+    <script>
+        /* MASTER DATA: DATABASE BAHAN BAKU */
+        const DATABASE_ITEMS = [
+            { id: 1, name: "Tetes Tebu (Molasses)", price: 2800, origin: "Lokal", category: "Energi", leadTime: 3, protein: 3, energi: 2400 },
+            { id: 2, name: "Dedak Padi Halus", price: 3100, origin: "Lokal", category: "Energi", leadTime: 2, protein: 12, energi: 2980 },
+            { id: 3, name: "Bungkil Inti Sawit (PKO)", price: 4200, origin: "Lokal", category: "Protein", leadTime: 4, protein: 16, energi: 1900 },
+            { id: 4, name: "Jagung Lokal", price: 5200, origin: "Lokal", category: "Energi", leadTime: 3, protein: 8.5, energi: 3350 },
+            { id: 5, name: "Tepung Maggot BSF", price: 7200, origin: "Lokal", category: "Protein", leadTime: 5, protein: 40, energi: 2100 },
+            { id: 6, name: "Tepung Kacang Komak", price: 8500, origin: "Lokal", category: "Protein", leadTime: 6, protein: 38, energi: 2250 },
+            { id: 7, name: "Meat & Bone Meal (MBM)", price: 9000, origin: "Lokal", category: "Protein", leadTime: 8, protein: 48, energi: 2350 },
+            { id: 8, name: "Soybean Meal (Bunge, Brasil)", price: 9600, origin: "Impor", category: "Protein", leadTime: 24, protein: 43, energi: 2200 },
+            { id: 9, name: "Soybean Meal (Cargill, AS)", price: 9800, origin: "Impor", category: "Protein", leadTime: 21, protein: 44, energi: 2230 },
+            { id: 10, name: "Soybean Meal (ADM, Argentina)", price: 10200, origin: "Impor", category: "Protein", leadTime: 19, protein: 45, energi: 2260 },
+            { id: 11, name: "Soybean Meal (Distributor Jawa)", price: 10800, origin: "Lokal", category: "Protein", leadTime: 5, protein: 42, energi: 2180 },
+            { id: 12, name: "Corn Gluten Meal (CGM)", price: 11500, origin: "Impor", category: "Protein", leadTime: 18, protein: 60, energi: 3800 },
+            { id: 13, name: "Minyak Sawit Murni (CPO)", price: 13500, origin: "Lokal", category: "Energi", leadTime: 3, protein: 0, energi: 8800 },
+            { id: 14, name: "Tepung Ikan 55%", price: 14500, origin: "Lokal", category: "Protein", leadTime: 7, protein: 55, energi: 2700 },
+            { id: 15, name: "Premix Vitamin & Mineral", price: 32000, origin: "Impor", category: "Vitamin", leadTime: 25, protein: 0, energi: 0 }
+        ];
+
+        /* FORMULA STATE IN CALCULATOR */
+        let activeFormula = [
+            { itemIndex: 3, pct: 50 },  // Jagung Lokal
+            { itemIndex: 8, pct: 30 },  // Soybean Meal (Cargill, AS)
+            { itemIndex: 1, pct: 15 },  // Dedak Padi Halus
+            { itemIndex: 14, pct: 5 }   // Premix Vitamin & Mineral
+        ];
+
+        const fmtRp = (num) => "Rp " + Math.round(num).toLocaleString("id-ID");
+
+        /* AUTH & MODAL LOGIN FUNCTIONS */
+        function openLoginModal() {
+            document.getElementById('loginModal').style.display = 'flex';
+            document.getElementById('errorMessage').style.display = 'none';
+        }
+
+        function closeLoginModal() {
+            document.getElementById('loginModal').style.display = 'none';
+        }
+
+        function togglePasswordVisibility() {
+            const passwordInput = document.getElementById('password');
+            const toggleBtn = document.querySelector('.toggle-password');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleBtn.textContent = 'Sembunyi';
+            } else {
+                passwordInput.type = 'password';
+                toggleBtn.textContent = 'Lihat';
+            }
+        }
+
+        function handleForgotPassword(e) {
+            e.preventDefault();
+            alert('Lupa Kata Sandi?\n\nSilakan hubungi IT Helpdesk PAMG:\n• Telepon: (021) 6929578\n• LinkedIn: PT Peternakan Ayam Manggis');
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const emailInput = document.getElementById('email').value.trim();
+            const passwordInput = document.getElementById('password').value;
+            const errorMessage = document.getElementById('errorMessage');
+
+            if (emailInput === "karyawan@pamg.co.id" && passwordInput === "pamg2026") {
+                errorMessage.style.display = 'none';
+                closeLoginModal();
+
+                document.getElementById('landingView').style.display = 'none';
+                document.getElementById('dashboardView').style.display = 'flex';
+                
+                renderFormulaRows();
+                renderDatabase();
+                initSubstitusiOptions();
+            } else {
+                errorMessage.style.display = 'block';
+            }
+        }
+
+        function handleLogout() {
+            document.getElementById('dashboardView').style.display = 'none';
+            document.getElementById('landingView').style.display = 'flex';
+        }
+
+        /* MODAL TAMBAH BAHAN MANUAL LOGIC */
+        function openAddIngredientModal() {
+            document.getElementById('addIngredientModal').style.display = 'flex';
+        }
+
+        function closeAddIngredientModal() {
+            document.getElementById('addIngredientModal').style.display = 'none';
+            document.getElementById('addIngredientForm').reset();
+        }
+
+        function handleAddNewIngredient(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('newIngName').value.trim();
+            const price = parseFloat(document.getElementById('newIngPrice').value) || 0;
+            const origin = document.getElementById('newIngOrigin').value;
+            const category = document.getElementById('newIngCategory').value;
+            const leadTime = parseInt(document.getElementById('newIngLead').value, 10) || 0;
+            const protein = parseFloat(document.getElementById('newIngProtein').value) || 0;
+            const energi = parseFloat(document.getElementById('newIngEnergi').value) || 0;
+
+            const newIngredient = {
+                id: DATABASE_ITEMS.length + 1,
+                name: name,
+                price: price,
+                origin: origin,
+                category: category,
+                leadTime: leadTime,
+                protein: protein,
+                energi: energi
+            };
+
+            DATABASE_ITEMS.push(newIngredient);
+
+            renderDatabase();
+            renderFormulaRows();
+            initSubstitusiOptions();
+
+            closeAddIngredientModal();
+        }
+
+        /* TAB NAVIGATION LOGIC */
+        function switchTab(tabName) {
+            document.getElementById('tabContentKalkulator').style.display = 'none';
+            document.getElementById('tabContentDatabase').style.display = 'none';
+            document.getElementById('tabContentSubstitusi').style.display = 'none';
+
+            document.getElementById('tabBtnKalkulator').classList.remove('active');
+            document.getElementById('tabBtnDatabase').classList.remove('active');
+            document.getElementById('tabBtnSubstitusi').classList.remove('active');
+
+            if (tabName === 'kalkulator') {
+                document.getElementById('tabContentKalkulator').style.display = 'block';
+                document.getElementById('tabBtnKalkulator').classList.add('active');
+                renderFormulaRows();
+            } else if (tabName === 'database') {
+                document.getElementById('tabContentDatabase').style.display = 'block';
+                document.getElementById('tabBtnDatabase').classList.add('active');
+                renderDatabase();
+            } else if (tabName === 'substitusi') {
+                document.getElementById('tabContentSubstitusi').style.display = 'block';
+                document.getElementById('tabBtnSubstitusi').classList.add('active');
+                initSubstitusiOptions();
+            }
+        }
+
+        /* TAB 1: FORMULA CALCULATOR LOGIC */
+        function renderFormulaRows() {
+            const container = document.getElementById('formulaListContainer');
+            if (!container) return;
+
+            let html = '';
+            activeFormula.forEach((row, index) => {
+                const item = DATABASE_ITEMS[row.itemIndex] || DATABASE_ITEMS[0];
+                const pctVal = parseFloat(row.pct) || 0;
+                const itemCost = (pctVal / 100) * item.price;
+
+                const options = DATABASE_ITEMS.map((dbItem, dbIdx) => {
+                    const selected = dbIdx === row.itemIndex ? 'selected' : '';
+                    return `<option value="${dbIdx}" ${selected}>${dbItem.name}</option>`;
+                }).join('');
+
+                html += `
+                    <div class="ingredient-item">
+                        <div class="ing-details-left">
+                            <select class="ing-select" onchange="updateFormulaItem(${index}, 'itemIndex', this.value)">
+                                ${options}
+                            </select>
+                            <span class="ing-price">${fmtRp(item.price)}/kg | CP: ${item.protein}% | ME: ${item.energi} kcal</span>
+                        </div>
+                        <div class="ing-input-group">
+                            <span class="ing-cost-calc" id="ing-cost-${index}">${fmtRp(itemCost)}</span>
+                            <div class="input-box-wrapper">
+                                <input type="text" inputmode="decimal" class="pct-input" value="${row.pct}" onfocus="this.select()" oninput="updateFormulaItem(${index}, 'pct', this.value)">
+                                <span class="input-suffix">%</span>
+                            </div>
+                            <button class="btn-remove-ing" onclick="removeFormulaRow(${index})" title="Hapus bahan">&times;</button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+            calculateAll();
+        }
+
+        function addFormulaRow() {
+            activeFormula.push({ itemIndex: 0, pct: 0 });
+            renderFormulaRows();
+        }
+
+        function removeFormulaRow(index) {
+            if (activeFormula.length <= 1) {
+                alert('Formula minimal harus memiliki 1 jenis bahan pakan.');
+                return;
+            }
+            activeFormula.splice(index, 1);
+            renderFormulaRows();
+        }
+
+        function updateFormulaItem(index, field, value) {
+            if (field === 'itemIndex') {
+                activeFormula[index].itemIndex = parseInt(value, 10);
+                renderFormulaRows();
+            } else if (field === 'pct') {
+                const cleanVal = value.replace(/[^0-9.]/g, '');
+                activeFormula[index].pct = cleanVal;
+
+                const pctVal = parseFloat(cleanVal) || 0;
+                const item = DATABASE_ITEMS[activeFormula[index].itemIndex] || DATABASE_ITEMS[0];
+                const itemCost = (pctVal / 100) * item.price;
+
+                const costElem = document.getElementById(`ing-cost-${index}`);
+                if (costElem) {
+                    costElem.textContent = fmtRp(itemCost);
+                }
+
+                calculateAll();
+            }
+        }
+
+        function calculateAll() {
+            let totalPct = 0;
+            let totalCostPerKg = 0;
+            let weightedCp = 0;
+            let weightedMe = 0;
+
+            activeFormula.forEach(row => {
+                const item = DATABASE_ITEMS[row.itemIndex] || DATABASE_ITEMS[0];
+                const pct = parseFloat(row.pct) || 0;
+                
+                totalPct += pct;
+                totalCostPerKg += (pct / 100) * item.price;
+                weightedCp += (pct / 100) * item.protein;
+                weightedMe += (pct / 100) * item.energi;
+            });
+
+            const totalBadge = document.getElementById('totalPctBadge');
+            totalBadge.textContent = `(Total: ${totalPct.toFixed(1)}%)`;
+            if (Math.abs(totalPct - 100) > 0.01) {
+                totalBadge.classList.add('error');
+            } else {
+                totalBadge.classList.remove('error');
+            }
+
+            document.getElementById('hppPerKg').innerHTML = `${fmtRp(totalCostPerKg)} <span>/ kg</span>`;
+            document.getElementById('val-cp').textContent = weightedCp.toFixed(1) + "%";
+            document.getElementById('val-me').innerHTML = Math.round(weightedMe) + " <span>kcal/kg</span>";
+
+            const volumeTon = parseFloat(document.getElementById('volumeTon').value) || 0;
+            const marginPct = parseFloat(document.getElementById('targetMargin').value) || 0;
+
+            const totalHpp = totalCostPerKg * volumeTon * 1000;
+            const hargaJual = totalCostPerKg * (1 + (marginPct / 100));
+            const totalMargin = (hargaJual - totalCostPerKg) * volumeTon * 1000;
+
+            document.getElementById('lblTotalHpp').textContent = `Total HPP Produksi (${volumeTon} Ton)`;
+            document.getElementById('valTotalHpp').textContent = fmtRp(totalHpp);
+            document.getElementById('lblHargaJual').textContent = `Harga Jual Rekomendasi (+${marginPct}%)`;
+            document.getElementById('valHargaJual').textContent = `${fmtRp(hargaJual)} / kg`;
+            document.getElementById('valTotalMargin').textContent = fmtRp(totalMargin);
+        }
+
+        /* TAB 2: DATABASE BAHAN LOGIC */
+        function renderDatabase() {
+            const searchQuery = document.getElementById('dbSearch').value.toLowerCase().trim();
+            const filterAsal = document.getElementById('filterAsal').value;
+            const filterUrutkan = document.getElementById('filterUrutkan').value;
+            const gridContainer = document.getElementById('dbGrid');
+
+            let filtered = DATABASE_ITEMS.filter(item => {
+                const matchSearch = item.name.toLowerCase().includes(searchQuery) || item.category.toLowerCase().includes(searchQuery);
+                const matchAsal = (filterAsal === 'all') || 
+                                  (filterAsal === 'lokal' && item.origin === 'Lokal') || 
+                                  (filterAsal === 'impor' && item.origin === 'Impor');
+                return matchSearch && matchAsal;
+            });
+
+            if (filterUrutkan === 'price_asc') {
+                filtered.sort((a, b) => a.price - b.price);
+            } else if (filterUrutkan === 'protein_desc') {
+                filtered.sort((a, b) => b.protein - a.protein);
+            } else if (filterUrutkan === 'energi_desc') {
+                filtered.sort((a, b) => b.energi - a.energi);
+            } else if (filterUrutkan === 'lead_asc') {
+                filtered.sort((a, b) => a.leadTime - b.leadTime);
+            }
+
+            if (filtered.length === 0) {
+                gridContainer.innerHTML = `<div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: #64748b;">Tidak ada bahan pakan yang sesuai dengan pencarian.</div>`;
+                return;
+            }
+
+            gridContainer.innerHTML = filtered.map(item => {
+                const originBadgeClass = item.origin === 'Lokal' ? 'badge-lokal' : 'badge-impor';
+                return `
+                    <div class="db-card">
+                        <div class="db-card-header">
+                            <div class="db-title">${item.name}</div>
+                            <div class="db-price">${fmtRp(item.price)}/kg</div>
+                        </div>
+
+                        <div class="db-badges">
+                            <span class="badge-tag ${originBadgeClass}">${item.origin}</span>
+                            <span class="badge-tag badge-category">${item.category}</span>
+                            <span class="badge-tag badge-lead">Lead: ${item.leadTime} hari</span>
+                        </div>
+
+                        <div class="db-nutri-box">
+                            <div class="db-nutri-item">
+                                <span class="lbl">Protein:</span>
+                                <span class="val">${item.protein}%</span>
+                            </div>
+                            <div class="db-nutri-item">
+                                <span class="lbl">Energi:</span>
+                                <span class="val">${item.energi} kcal</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        /* TAB 3: SIMULASI SUBSTITUSI LOGIC */
+        function initSubstitusiOptions() {
+            const select = document.getElementById('subBaselineSelect');
+            if (!select) return;
+
+            const selectedValue = select.value;
+            select.innerHTML = DATABASE_ITEMS.map((item, idx) => {
+                return `<option value="${idx}">${item.name} (${fmtRp(item.price)})</option>`;
+            }).join('');
+
+            if (selectedValue && selectedValue < DATABASE_ITEMS.length) {
+                select.value = selectedValue;
+            } else {
+                select.value = 1;
+            }
+
+            renderSubstitusi();
+        }
+
+        function renderSubstitusi() {
+            const baselineIdx = parseInt(document.getElementById('subBaselineSelect').value, 10) || 0;
+            const baseline = DATABASE_ITEMS[baselineIdx];
+
+            let wBiaya = parseFloat(document.getElementById('weightBiaya').value) || 0;
+            let wNutrisi = parseFloat(document.getElementById('weightNutrisi').value) || 0;
+            let wPasokan = parseFloat(document.getElementById('weightPasokan').value) || 0;
+
+            const totalWeight = wBiaya + wNutrisi + wPasokan;
+            const normBiaya = totalWeight > 0 ? wBiaya / totalWeight : 0.33;
+            const normNutrisi = totalWeight > 0 ? wNutrisi / totalWeight : 0.33;
+            const normPasokan = totalWeight > 0 ? wPasokan / totalWeight : 0.33;
+
+            document.getElementById('subResultsHeader').textContent = `Rekomendasi Substitusi Terbaik untuk ${baseline.name}`;
+
+            const candidates = DATABASE_ITEMS.filter((_, idx) => idx !== baselineIdx).map(candidate => {
+                let costScore = 100;
+                if (candidate.price > baseline.price) {
+                    const priceDiffPct = ((candidate.price - baseline.price) / baseline.price) * 100;
+                    costScore = Math.max(0, 100 - (priceDiffPct * 1.5));
+                }
+
+                const cpDiff = Math.abs(candidate.protein - baseline.protein) / Math.max(baseline.protein, 1);
+                const meDiff = Math.abs(candidate.energi - baseline.energi) / Math.max(baseline.energi, 1);
+                const nutriScore = Math.max(0, Math.round((1 - (cpDiff * 0.5 + meDiff * 0.5)) * 100));
+
+                let pasokanScore = Math.max(40, 100 - (candidate.leadTime * 2.2));
+                if (candidate.origin === "Lokal") pasokanScore = Math.min(100, pasokanScore + 10);
+
+                const finalScore = Math.round(
+                    (costScore * normBiaya) + 
+                    (nutriScore * normNutrisi) + 
+                    (pasokanScore * normPasokan)
+                );
+
+                return {
+                    ...candidate,
+                    costScore: Math.round(costScore),
+                    nutriScore: Math.round(nutriScore),
+                    pasokanScore: Math.round(pasokanScore),
+                    finalScore: Math.min(100, Math.max(0, finalScore))
+                };
+            });
+
+            candidates.sort((a, b) => b.finalScore - a.finalScore);
+
+            const container = document.getElementById('substitusiListContainer');
+            
+            container.innerHTML = candidates.map((cand, idx) => {
+                const isOptimal = idx === 0;
+                const optimalBadgeHtml = isOptimal ? `<span class="badge-optimal">Pilihan Optimal</span>` : '';
+                const cardClass = isOptimal ? 'sub-card optimal' : 'sub-card';
+
+                return `
+                    <div class="${cardClass}">
+                        <div class="sub-card-top">
+                            <div>
+                                <div class="sub-item-title-group">
+                                    <span class="sub-item-title">${cand.name}</span>
+                                    ${optimalBadgeHtml}
+                                </div>
+                                <div class="sub-meta-info" style="margin-top: 4px;">
+                                    Harga: <strong>${fmtRp(cand.price)}/kg</strong> | Protein: <strong>${cand.protein}%</strong> | Energi: <strong>${cand.energi} kcal</strong>
+                                </div>
+                            </div>
+
+                            <div class="sub-score-box">
+                                <div class="sub-score-num">${cand.finalScore} <span>/100</span></div>
+                                <div class="sub-score-label">Skor Kelayakan</div>
+                            </div>
+                        </div>
+
+                        <div class="sub-metrics-grid">
+                            <div class="metric-item">
+                                <div class="metric-header">
+                                    <span>Kemiripan Nutrisi</span>
+                                    <span class="metric-val">${cand.nutriScore}%</span>
+                                </div>
+                                <div class="progress-bar-bg">
+                                    <div class="progress-bar-fill fill-blue" style="width: ${cand.nutriScore}%;"></div>
+                                </div>
+                            </div>
+
+                            <div class="metric-item">
+                                <div class="metric-header">
+                                    <span>Indeks Ketahanan Pasokan</span>
+                                    <span class="metric-val">${cand.pasokanScore}%</span>
+                                </div>
+                                <div class="progress-bar-bg">
+                                    <div class="progress-bar-fill fill-green" style="width: ${cand.pasokanScore}%;"></div>
+                                </div>
+                            </div>
+
+                            <div class="metric-item">
+                                <div class="metric-header">
+                                    <span>Efisiensi Biaya</span>
+                                    <span class="metric-val">${cand.costScore}%</span>
+                                </div>
+                                <div class="progress-bar-bg">
+                                    <div class="progress-bar-fill fill-orange" style="width: ${cand.costScore}%;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        /* AI AGENT CHAT LOGIC */
+        function toggleAiChat() {
+            const chatWin = document.getElementById('aiChatWindow');
+            if (chatWin.style.display === 'none' || chatWin.style.display === '') {
+                chatWin.style.display = 'flex';
+            } else {
+                chatWin.style.display = 'none';
+            }
+        }
+
+        function handleAiKeyPress(e) {
+            if (e.key === 'Enter') {
+                sendAiMessage();
+            }
+        }
+
+        function sendQuickPrompt(promptText) {
+            const input = document.getElementById('aiInput');
+            input.value = promptText;
+            sendAiMessage();
+        }
+
+        function sendAiMessage() {
+            const input = document.getElementById('aiInput');
+            const text = input.value.trim();
+            if (!text) return;
+
+            const chatBody = document.getElementById('aiChatBody');
+
+            // Append User Message
+            const userMsgDiv = document.createElement('div');
+            userMsgDiv.className = 'chat-msg msg-user';
+            userMsgDiv.textContent = text;
+            chatBody.appendChild(userMsgDiv);
+
+            input.value = '';
+            chatBody.scrollTop = chatBody.scrollHeight;
+
+            // Generate AI Response
+            setTimeout(() => {
+                const aiMsgDiv = document.createElement('div');
+                aiMsgDiv.className = 'chat-msg msg-ai';
+                aiMsgDiv.innerHTML = generateAiResponse(text);
+                chatBody.appendChild(aiMsgDiv);
+                chatBody.scrollTop = chatBody.scrollHeight;
+            }, 600);
+        }
+
+        function generateAiResponse(query) {
+            const q = query.toLowerCase();
+
+            if (q.includes('hpp') || q.includes('turun') || q.includes('efisiensi') || q.includes('biaya')) {
+                return "<strong>Tips Efisiensi HPP:</strong><br>1. Gunakan bahan lokal seperti <em>Dedak Padi Halus</em> atau <em>Tepung Maggot BSF</em>.<br>2. Manfaatkan fitur <strong>Simulasi Substitusi</strong> di Tab 3 untuk menemukan pengganti komoditas impor mahal (seperti SBM) tanpa merusak nilai Protein Kasar (CP).";
+            } 
+            else if (q.includes('protein') || q.includes('cp') || q.includes('broiler')) {
+                return "<strong>Rekomendasi Protein Kasar (CP):</strong><br>• <strong>Starter (0-2 minggu):</strong> 21% - 23% CP<br>• <strong>Finisher (3+ minggu):</strong> 19% - 21% CP<br>Anda dapat memantau estimasi CP terkini secara otomatis di Tab <strong>Kalkulator Formula</strong>.";
+            } 
+            else if (q.includes('substitusi') || q.includes('sbm') || q.includes('soybean')) {
+                return "<strong>Saran Substitusi SBM (Soybean Meal):</strong><br>Anda dapat mengganti sebagian SBM dengan <strong>Tepung Maggot BSF</strong> (40% CP) atau <strong>Bungkil Inti Sawit / PKO</strong> untuk menekan biaya dengan pasokan lokal yang terjamin.";
+            } 
+            else if (q.includes('tambah bahan') || q.includes('manual')) {
+                return "<strong>Cara Tambah Bahan Manual:</strong><br>Masuk ke Tab <strong>Database Bahan</strong>, lalu klik tombol hijau <strong>'+ Tambah Bahan'</strong> di sebelah kanan atas bar pencarian. Bahan baru akan otomatis bisa dipakai di Kalkulator & Substitusi!";
+            }
+            else {
+                return "Terima kasih atas pertanyaannya! Untuk kebutuhan operasional khusus atau penyesuaian pakan tingkat lanjut, Anda dapat menggunakan <strong>Kalkulator Formula</strong> atau memeriksa opsi komoditas di <strong>Database Bahan</strong>.";
+            }
+        }
+
+        window.onclick = function(event) {
+            const loginModal = document.getElementById('loginModal');
+            const addIngModal = document.getElementById('addIngredientModal');
+            if (event.target == loginModal) {
+                loginModal.style.display = 'none';
+            }
+            if (event.target == addIngModal) {
+                closeAddIngredientModal();
+            }
+        }
+    </script>
+</body>
+</html>
